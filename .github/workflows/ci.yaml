@@ -6,11 +6,10 @@ jobs:
   Learning-Rust:
      runs-on: ubuntu-latest
      steps:
-      - name: Setup Rust 
-        run: |
-              curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
       - name: Tests
         run: cargo test
       - name: Code Coverage
@@ -24,7 +23,7 @@ jobs:
       - name: Formatting
         run: |
               rustup component add rustfmt
-              cargo fmt -- -check
+              cargo fmt -- --check
       - name: Security Audit
         run: |
               cargo install cargo-audit
