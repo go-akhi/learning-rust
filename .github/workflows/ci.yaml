@@ -1,0 +1,30 @@
+name: CI
+run-name: ${{ github.actor }} is testing CI for their rust projects
+on: [push]
+
+jobs:
+     runs-on: ubuntu-latest
+     steps:
+          - name: Setup Rust 
+            run: |
+                  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+          - name: Checkout code
+            uses: actions/checkout@v3
+          - name: Tests
+            run: cargo test
+          - name: Code Coverage
+            run: |
+                  cargo install cargo-tarpaulin
+                  cargo tarpaulin --ignore-tests
+          - name: Linting
+            run: |
+                  rustup component add clippy
+                  cargo clippy -- -D warnings
+          - name: Formatting
+            run: |
+                  rustup component add rustfmt
+                  cargo fmt -- -check
+          - name: Security Audit
+            run: |
+                  cargo install cargo-audit
+                  cargo audit
